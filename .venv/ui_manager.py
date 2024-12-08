@@ -2,6 +2,9 @@ import tkinter as tk
 from game_logic import Game2048
 from themes import get_themes, get_number_schemes
 
+# importing a module so the code will work with JSON data
+import json
+
 class Game2048UI:
     def __init__(self, root):
         self.root = root
@@ -37,8 +40,6 @@ class Game2048UI:
 
     def start_screen(self):
         self.clear_screen()
-        start_button = tk.Button(self.root, text="Start Game", font=("Arial", 24), command=self.start_game)
-        start_button.pack(pady=20)
 
         theme_label = tk.Label(self.root, text="Select Theme:", font=("Arial", 18))
         theme_label.pack()
@@ -53,6 +54,73 @@ class Game2048UI:
         for scheme in ["DefaultColors", *self.number_schemes.keys()]:
             number_radio = tk.Radiobutton(self.root, text=scheme, variable=self.number_var, value=scheme, font=("Arial", 14), command=self.set_number_scheme)
             number_radio.pack(pady=5)
+        self.user_input()
+        
+
+    # defining the function for things the user will input
+    def user_input(self):
+
+        # creating widgets
+        # label for first name and the input box for entry
+        UserFirstNameTitle = tk.Label(self.root, text="First name:", font=("Arial", 14))
+        self.UserFirstNameInput = tk.Entry(self.root, width=20)
+
+        # label for last name and the input box for entry
+        UserLastNameTitle = tk.Label(self.root, text="Last name:", font=("Arial", 14))
+        self.UserLastNameInput = tk.Entry(self.root, width=20)
+        
+        # defining a function for saving the users information
+        def save_user_info():
+
+            # retrieving user input
+            first_name = self.UserFirstNameInput.get()
+            last_name = self.UserLastNameInput.get()
+
+            # saving to JSON
+            file_name = 'user_info.json'
+            data_to_save = {"first name": first_name, "last name": last_name}
+
+            # try opening the JSON file and loading the data
+            try:
+                with open(file_name, 'r') as file:
+                    # load the JSON data
+                    existing_data = json.load(file)
+                    # if the existing data isn't a list, make it one
+                    if not isinstance(existing_data, list):
+                        existing_data = []
+
+            # if the data doesn't exist or there's an issue with the file,
+            except (FileNotFoundError, json.JSONDecodeError):
+                # save to a new and empty list.
+                existing_data = []
+
+            # save the new data to the existing data
+            existing_data.append(data_to_save)
+
+            # put the data in the file in JSON format
+            with open(file_name, 'w') as file:
+                json.dump(existing_data, file, indent=4)
+
+            # print a message to make sure the data is saved
+            print(f"Saved: {data_to_save}")
+
+        # add a 'start game' button
+        start_button = tk.Button(
+            self.root,
+            text="Start Game",
+            font=("Arial", 24),
+            command=lambda: [save_user_info(), self.start_game()]
+        )
+        start_button.pack(pady=20)
+        
+        # show the widgets in order
+        UserFirstNameTitle.pack()
+        self.UserFirstNameInput.pack()
+        UserLastNameTitle.pack()
+        self.UserLastNameInput.pack()
+
+
+
 
     def start_game(self):
         self.game = Game2048()
