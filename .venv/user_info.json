@@ -3,5 +3,10 @@
         "first name": "Ali",
         "last name": "Rahmani",
         "scores": 380
+    },
+    "Unknown Player": {
+        "first name": "Unknown",
+        "last name": "Player",
+        "scores": 1916
     }
 }
