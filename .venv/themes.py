@@ -33,6 +33,19 @@ def get_themes():
 
 def get_number_schemes():
     number_schemes = {
+        "Orange": {
+            2: "#ffe5d9",
+            4: "#ffc1a1",
+            8: "#ff9f6d",
+            16: "#ff7d41",
+            32: "#ff5b17",
+            64: "#e64a00",
+            128: "#cc3e00",
+            256: "#b33200",
+            512: "#992700",
+            1024: "#801e00",
+            2048: "#661400",
+        },
         "Blue": {
             2: "#d0e1f9",
             4: "#4d90fe",
@@ -58,6 +71,7 @@ def get_number_schemes():
             512: "#0c2c0d",
             1024: "#061906",
             2048: "#020f03",
-        },
+        }
+
     }
     return number_schemes
