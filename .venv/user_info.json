@@ -2,6 +2,26 @@
     "Ali Rahmani": {
         "first name": "Ali",
         "last name": "Rahmani",
-        "scores": 380
+        "scores": 664
+    },
+    "Vanessa Banks": {
+        "first name": "Vanessa",
+        "last name": "Banks",
+        "scores": 412
+    },
+    "Unknown Player": {
+        "first name": "Unknown",
+        "last name": "Player",
+        "scores": 508
+    },
+    "Andrew Player": {
+        "first name": "Andrew",
+        "last name": "Player",
+        "scores": 1084
+    },
+    "new player": {
+        "first name": "new",
+        "last name": "player",
+        "scores": 336
     }
 }

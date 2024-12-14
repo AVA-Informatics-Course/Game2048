@@ -1,34 +1,17 @@
+"""
+Provides pre-defined themes and number schemes for the 2048 game.
+
+- `get_themes()`: Returns color themes for tile backgrounds based on their values.
+- `get_number_schemes()`: Returns color schemes for tile numbers based on their values.
+"""
+
 def get_themes():
     themes = {
-        "Default": {
-            0: "lightgray",
-            2: "#eee4da",
-            4: "#ede0c8",
-            8: "#f2b179",
-            16: "#f59563",
-            32: "#f67c5f",
-            64: "#f65e3b",
-            128: "#edcf72",
-            256: "#edcc61",
-            512: "#edc850",
-            1024: "#edc53f",
-            2048: "#edc22e",
-        },
-        "Dark": {
-            0: "#3c3c3c",
-            2: "#4e4e4e",
-            4: "#5e5e5e",
-            8: "#7f7f7f",
-            16: "#9f9f9f",
-            32: "#afafaf",
-            64: "#bfbfbf",
-            128: "#dfdfdf",
-            256: "#efefef",
-            512: "#ffffff",
-            1024: "#cccccc",
-            2048: "#999999",
-        },
-    }
+        "Default": "#D3D3D3",
+        "Slightly Dark": "#a9a9a9",
+        "Dark": "#545454"
+        }
+
     return themes
 
 def get_number_schemes():

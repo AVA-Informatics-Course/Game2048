@@ -4,7 +4,16 @@ from themes import get_themes, get_number_schemes
 import json
 
 class Game2048UI:
+    """
+    Handles the UI for the 2048 game, including themes, user interactions, and grid updates.
+    """
+
     def __init__(self, root):
+
+        """
+        Initializes the main window, game settings, and displays the start screen.
+        """
+
         self.root = root
         self.root.title("2048 Game")
 
@@ -21,8 +30,11 @@ class Game2048UI:
         self.user_first_name = ""
         self.user_last_name = ""
         self.start_screen()
+        self.win_score = 64
 
     def set_dynamic_window_size(self):
+        """Sets the window size dynamically based on the screen resolution."""
+
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
         width = int(screen_width * 0.3)
@@ -32,6 +44,8 @@ class Game2048UI:
         self.center_window(width, height)
 
     def center_window(self, width, height):
+        """Centers the window on the screen."""
+
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
         x = (screen_width // 2) - (width // 2)
@@ -39,6 +53,8 @@ class Game2048UI:
         self.root.geometry(f"{width}x{height}+{x}+{y}")
 
     def start_screen(self):
+        """Displays the start screen with theme and user options."""
+
         self.clear_screen()
 
         # Create a frame for the entire start screen
@@ -134,82 +150,29 @@ class Game2048UI:
             bg="#4caf50",
             activebackground="#45a049",
             activeforeground="white",
-            command=self.save_user_and_start_game,  # Updated command here
+            command=self.save_user_and_start_game,
             relief="raised",
             borderwidth=3
         )
         start_button.pack(pady=(20, 0))
 
+    def clear_screen(self):
+        """
+        Clears all widgets from the main window.
+        """
 
-    def user_input(self):
-        user_first_name_label = tk.Label(self.root, text="First Name:", font=("Arial", 14))
-        self.user_first_name_entry = tk.Entry(self.root, width=20)
-
-        user_last_name_label = tk.Label(self.root, text="Last Name:", font=("Arial", 14))
-        self.user_last_name_entry = tk.Entry(self.root, width=20)
-
-        def save_user_info():
-            self.user_first_name = self.user_first_name_entry.get()
-            self.user_last_name = self.user_last_name_entry.get()
-            if not self.user_first_name:
-                self.user_first_name = "Unknown"
-            if not self.user_last_name:
-                self.user_last_name = "Player"
-
-            self.fetch_user_data()
-            self.start_game()
-
-        start_button = tk.Button(
-            self.root,
-            text="Start Game",
-            font=("Arial", 24),
-            command=lambda: [save_user_info(), self.start_game()]
-        )
-
-        user_first_name_label.pack()
-        self.user_first_name_entry.pack()
-        user_last_name_label.pack()
-        self.user_last_name_entry.pack()
-        start_button.pack(pady=20)
-
-    def save_user_and_start_game(self):
-        self.user_first_name = self.user_first_name_entry.get()
-        self.user_last_name = self.user_last_name_entry.get()
-
-        if not self.user_first_name:
-            self.user_first_name = "Unknown"
-        if not self.user_last_name:
-            self.user_last_name = "Player"
-
-        self.fetch_user_data()  # Save the user data
-        self.start_game()  # Start the game
-
-    def fetch_user_data(self):
-        file_name = 'user_info.json'
-        try:
-            with open(file_name, 'r') as file:
-                user_data = json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_data = {}
-
-        user_key = f"{self.user_first_name} {self.user_last_name}"
-
-        # Add user data if not present
-        if user_key not in user_data:
-            user_data[user_key] = {
-                "first name": self.user_first_name,
-                "last name": self.user_last_name,
-                "scores": 0
-            }
-
-        # Save updated data back to the file
-        with open(file_name, 'w') as file:
-            json.dump(user_data, file, indent=4)
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
     def start_game(self):
-        self.game = Game2048()  # Initialize game first
-        self.clear_screen()  # Clear all existing widgets
-        self.build_grid()  # Create a fresh grid
+        """
+        Initializes a new game, sets up the UI with a fresh grid, player information,
+        and control buttons, then starts the game with key bindings.
+        """
+
+        self.game = Game2048()
+        self.clear_screen()
+        self.build_grid()
 
         # Create the info frame at the top
         self.info_frame = tk.Frame(self.root, bg="lightblue", padx=10, pady=10)
@@ -231,10 +194,10 @@ class Game2048UI:
         )
         self.score_label.pack()
 
-        # Add control buttons below the game
+        # Add control buttons
         self.add_control_buttons()
 
-        # Now save the updated user score
+        # Save the updated user score
         self.save_user_score()
 
         # Start game with updated UI
@@ -242,6 +205,9 @@ class Game2048UI:
         self.root.bind("<Key>", self.handle_keypress)
 
     def add_control_buttons(self):
+        """
+        Adds control buttons for navigating to the main menu and starting a new game.
+        """
         # Create Header Frame
         header_frame = tk.Frame(self.root, bg="#f7f7f7", pady=30)
         header_frame.pack(fill="x")
@@ -278,12 +244,11 @@ class Game2048UI:
         )
         new_game_button.pack(side="left", padx=10)
 
-    def clear_screen(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
-
     def build_grid(self):
-        # Clear the tiles list before rebuilding the grid
+        """
+        Builds the game grid as a grid of tiles and initializes the tiles list.
+        """
+
         self.tiles = []
         self.frame = tk.Frame(self.root, bg="gray", padx=5, pady=5)
         self.frame.place(relx=0.5, rely=0.5, anchor="center")
@@ -297,6 +262,9 @@ class Game2048UI:
             self.tiles.append(row)
 
     def update_ui(self):
+        """
+        Updates the UI by refreshing the grid tiles and score display, and saves the current score.
+        """
         for r in range(self.grid_size):
             for c in range(self.grid_size):
                 value = self.game.grid[r][c]
@@ -304,21 +272,31 @@ class Game2048UI:
         self.score_label.config(text=f"Score: {self.game.score}")
         self.save_user_score()
 
-    def get_tile_color(self, value):
-        # Get the base color from the current theme
-        base_color = self.themes[self.current_theme].get(value, "#cdc1b4")
+        if self.game.get_max_tile() == self.win_score:
+            self.show_win_message()
 
-        # Get the number color from the current number scheme if it's not the "Default" scheme
-        if self.current_number_scheme != "Default":
+    def get_tile_color(self, value):
+        """
+        Returns the tile color based on the value, current theme, and number scheme.
+        """
+
+        # Get the base color from the current theme
+        base_color = self.themes.get(self.current_theme, "lightgray")
+
+        # Get the number color from the current number scheme if it's not defined
+        if self.current_number_scheme is not None:
             number_color = self.number_schemes[self.current_number_scheme].get(value, "#ffffff")
-            # Combine the number color with the base color for visible contrast
+
             if value > 0:
-                # Adjust brightness or contrast for the combination
                 return number_color
-        # Fallback to the base color
+
         return base_color
 
     def handle_keypress(self, event):
+        """
+        Handles keypress events to control the game, checks for game-over conditions,
+        and updates the UI after each move.
+        """
         if event.keysym == "Left":
             self.game.move_left()
         elif event.keysym == "Right":
@@ -335,17 +313,81 @@ class Game2048UI:
             self.update_ui()
 
     def set_theme(self):
+        """
+        Updates the current theme based on the selected option.
+        """
         self.current_theme = self.theme_var.get()
 
     def set_number_scheme(self):
+        """
+        Updates the current number scheme based on the selected option.
+        """
         self.current_number_scheme = self.number_var.get()
 
     def show_game_over(self):
+        """
+        Displays a 'Game Over' message and disables key bindings.
+        """
         game_over_label = tk.Label(self.root, text="Game Over!", font=("Arial", 24), bg="red", fg="white")
         game_over_label.pack(pady=50, side="bottom")
         self.root.unbind("<Key>")
 
+    def show_win_message(self):
+
+        """
+        Displays a 'Congratulations!' message and disables key bindings.
+        """
+        game_over_label = tk.Label(self.root, text="Congratulations!", font=("Arial", 24), bg="green", fg="white")
+        game_over_label.pack(pady=50, side="bottom")
+        self.root.unbind("<Key>")
+
+    def save_user_and_start_game(self):
+        """
+        Saves the user's first and last name (or defaults if blank) and starts the game.
+        """
+
+        self.user_first_name = self.user_first_name_entry.get()
+        self.user_last_name = self.user_last_name_entry.get()
+
+        if not self.user_first_name:
+            self.user_first_name = "Unknown"
+        if not self.user_last_name:
+            self.user_last_name = "Player"
+
+        self.fetch_user_data()
+        self.start_game()
+
+    def fetch_user_data(self):
+        """
+        Fetches user data from a JSON file, adds the current user if not present,
+        and updates the file with the latest data.
+        """
+
+        file_name = 'user_info.json'
+        try:
+            with open(file_name, 'r') as file:
+                user_data = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            user_data = {}
+
+        user_key = f"{self.user_first_name} {self.user_last_name}"
+
+        # Add user data if not present
+        if user_key not in user_data:
+            user_data[user_key] = {
+                "first name": self.user_first_name,
+                "last name": self.user_last_name,
+                "scores": 0
+            }
+
+        # Save updated data back to the file
+        with open(file_name, 'w') as file:
+            json.dump(user_data, file, indent=4)
+
     def save_user_score(self):
+        """
+        Saves the current user's score to a JSON file, adding their data if not already present.
+        """
         file_name = 'user_info.json'
 
         try:
@@ -366,28 +408,3 @@ class Game2048UI:
 
         with open(file_name, 'w') as file:
             json.dump(user_data, file, indent=4)
-
-    def show_high_scores(self):
-        high_score_window = tk.Toplevel(self.root)
-        high_score_window.title("High Scores")
-
-        try:
-            with open('user_info.json', 'r') as file:
-                user_data = json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_data = {}
-
-        if user_data:
-            high_scores = [(key, data["scores"]) for key, data in user_data.items()]
-
-            sorted_scores = sorted(high_scores, key=lambda x: x[1], reverse=True)
-
-            for index, (name, score) in enumerate(sorted_scores):
-                score_label = tk.Label(high_score_window, text=f"{index + 1}. {name} - {score}", font=("Arial", 14))
-                score_label.pack()
-        else:
-            no_scores_label = tk.Label(high_score_window, text="No scores yet.", font=("Arial", 14))
-            no_scores_label.pack()
-
-        close_button = tk.Button(high_score_window, text="Close", command=high_score_window.destroy)
-        close_button.pack(pady=10)
