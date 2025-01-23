@@ -40,8 +40,8 @@ class Game2048UI:
 
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        width = int(screen_width * 0.3)
-        height = int(screen_height * 0.6)
+        width = int(screen_width * 0.4)
+        height = int(screen_height * 0.8)
         self.root.geometry(f"{width}x{height}")
         self.root.resizable(False, False)
         self.center_window(width, height)
