@@ -1,7 +1,7 @@
 import tkinter as tk
 from game_logic import Game2048
 from themes import get_themes, get_number_schemes
-import json
+from user_manager import UserManager
 
 class Game2048UI:
     """
@@ -17,6 +17,9 @@ class Game2048UI:
         self.root = root
         self.root.title("2048 Game")
 
+        self.user_manager = UserManager()  # Initialize UserManager
+        self.game = None
+
         # Set window size dynamically based on screen size
         self.set_dynamic_window_size()
 
@@ -30,7 +33,7 @@ class Game2048UI:
         self.user_first_name = ""
         self.user_last_name = ""
         self.start_screen()
-        self.win_score = 64
+        self.win_score = 2048
 
     def set_dynamic_window_size(self):
         """Sets the window size dynamically based on the screen resolution."""
@@ -357,54 +360,23 @@ class Game2048UI:
         self.fetch_user_data()
         self.start_game()
 
-    def fetch_user_data(self):
+    def save_user_and_start_game(self):
         """
-        Fetches user data from a JSON file, adds the current user if not present,
-        and updates the file with the latest data.
+        Saves the user's first and last name (or defaults if blank) and starts the game.
         """
+        self.user_first_name = self.user_first_name_entry.get()
+        self.user_last_name = self.user_last_name_entry.get()
 
-        file_name = 'user_info.json'
-        try:
-            with open(file_name, 'r') as file:
-                user_data = json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_data = {}
+        if not self.user_first_name:
+            self.user_first_name = "Unknown"
+        if not self.user_last_name:
+            self.user_last_name = "Player"
 
-        user_key = f"{self.user_first_name} {self.user_last_name}"
-
-        # Add user data if not present
-        if user_key not in user_data:
-            user_data[user_key] = {
-                "first name": self.user_first_name,
-                "last name": self.user_last_name,
-                "scores": 0
-            }
-
-        # Save updated data back to the file
-        with open(file_name, 'w') as file:
-            json.dump(user_data, file, indent=4)
+        self.user_manager.fetch_user_data(self.user_first_name, self.user_last_name)  # Call UserManager
+        self.start_game()
 
     def save_user_score(self):
         """
-        Saves the current user's score to a JSON file, adding their data if not already present.
+        Saves the current user's score using UserManager.
         """
-        file_name = 'user_info.json'
-
-        try:
-            with open(file_name, 'r') as file:
-                user_data = json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_data = {}
-
-        user_key = f"{self.user_first_name} {self.user_last_name}"
-        if user_key not in user_data:
-            user_data[user_key] = {
-                "first name": self.user_first_name,
-                "last name": self.user_last_name,
-                "scores": 0
-            }
-
-        user_data[user_key]["scores"] = self.game.score
-
-        with open(file_name, 'w') as file:
-            json.dump(user_data, file, indent=4)
+        self.user_manager.save_user_score(self.user_first_name, self.user_last_name, self.game.score)
