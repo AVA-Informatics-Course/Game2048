@@ -1,6 +1,6 @@
 # Game2048
 
-## Group Composition AVA (Andrew-Vanessa-Ali)
+## Group Composition AVA (Ali-Vanessa-Andrew)
 
 ### Developers:
 - [**Ali Rahmani**](https://www.iihr.uiowa.edu/people/ali-rahmani-qeranqayeh/)
@@ -12,11 +12,7 @@
 
 The game **2048** is a fun and addictive puzzle game. Players move numbered tiles on a grid to combine them and create larger numbers. The game begins with two tiles, showing either 2 or 4.
 
-![Game Start](./.venv/Images/Start_Page.png)
-
 Players use arrow keys to slide all tiles in one direction during their turn. If two tiles with the same number touch, they merge into one tile with their total value. The main goal is to create a tile with the number **2048**, which gives the game its name.
-
-![Game in Progress](./.venv/Images/Game_Page.png)
 
 The game ends when no moves are left, either because the grid is full or no tiles can combine anymore.
 
@@ -36,3 +32,11 @@ The key is to think strategically, plan moves, and anticipate how the tiles will
 
 - **Win**: The player wins the game upon successfully creating a tile with the number **2048**.
 - **Lose**: The player loses if the grid becomes completely filled and no valid moves are available.
+
+## Game View
+
+### Start Page
+![Game Start](./.venv/Images/Start_Page.png)
+
+### Game in Progress
+![Game in Progress](./.venv/Images/Game_Page.png)
