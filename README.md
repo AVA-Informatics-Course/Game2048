@@ -3,7 +3,7 @@
 ## Group Composition AVA (Ali-Vanessa-Andrew)
 
 ### Developers:
-- [**Ali Rahmani**](https://www.iihr.uiowa.edu/people/ali-rahmani-qeranqayeh/)
+- [**Ali Rahmani**](https://myweb.uiowa.edu/alirahmani/)
 - **V**anessa Banks
 - **A**ndrew Putt
   
